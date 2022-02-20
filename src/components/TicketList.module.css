@@ -1,0 +1,16 @@
+.wrapper {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 70vw;
+    height: 100vh;
+    position: relative;
+}
+.content {
+    height: 90vh;
+    overflow: scroll;
+}
+button {
+    position: fixed;
+    bottom: 0;
+}
