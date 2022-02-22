@@ -21,59 +21,53 @@ function App() {
       let num = allTickets[key]
       tickets2.push(num)
   }
-
-  // sort by duration
   const [byDuration, setByDuration] = useState(false);
-  // const sortByDuration = tickets2.sort(function(a, b) {
-  //     return a.legs[0].duration - b.legs[0].duration
-  // })
-
-  //sort by ascending price
   const [byAscending, setByAscending] = useState(false);
-  // const sortByAscending = tickets2.sort(function(a, b) {
-  //   return a.price.total.amount - b.price.total.amount
-  // })
-
-  // //sort by descending price
   const [byDescending, setByDescending] = useState(false);
-  // const sortByDescending = tickets2.sort(function(a, b) {
-  //   return b.price.total.amount - a.price.total.amount
-  // })
 
   useEffect(() => {
-    tickets2.sort(function(a, b) {
-      if(byDuration) {
-        return a.legs[0].duration - b.legs[0].duration
-      } else if (byAscending){
-        return a.price.total.amount - b.price.total.amount
-      } else if (byDescending) {
-        return b.price.total.amount - a.price.total.amount
+    // sort by duration
+    if(byDuration) {
+      const sortByDuration = tickets2.sort(function(a, b) {
+        console.log('сортировка по времени')
+          return a.legs[0].duration - b.legs[0].duration;
+      })
+      setIterat(sortByDuration)
+      console.log('по времени')
+      return function() {
+        setByDuration(false);
       }
-    })
-    // if (byDuration) {
-    //   setByAscending(false);
-    //   setByDescending(false);
-    //   const sortByDuration = tickets2.sort(function(a, b) {
-    //     return a.legs[0].duration - b.legs[0].duration
-    // })
-    //   setIterat(sortByDuration)
-    // } else if (byAscending) {
-    //   setByDuration(false);
-    //   setByDescending(false);
-    //   const sortByAscending = tickets2.sort(function(a, b) {
-    //     return a.price.total.amount - b.price.total.amount
-    //   })
-    //   setIterat(sortByAscending)
-    // } else if (byDescending) {
-    //   setByAscending(false);
-    //   setByDuration(false);
-    //   const sortByDescending = tickets2.sort(function(a, b) {
-    //     return b.price.total.amount - a.price.total.amount
-    //   })
-    //   setIterat(sortByDescending)
-    // }
+      //sort by ascending price
+    } else if(byAscending) {
+      const sortByAscending = tickets2.sort(function(a, b) {
+        console.log('сортировка по возр')
+        return a.price.total.amount - b.price.total.amount
+      })
+      setIterat(sortByAscending)
+      console.log('по возр')
+      return function() {
+        setByAscending(false);
+      }
+      //sort by descending price
+    } else if(byDescending) {
+      const sortByDescending = tickets2.sort(function(a, b) {
+        console.log('сортировка по убыв')
+        return b.price.total.amount - a.price.total.amount
+      })
+      setIterat(sortByDescending)
+      console.log('по убыв')
+      return function() {
+        setByDescending(false)
+      }
+    }
+    return function() {
+      setByDuration(false);
+      setByAscending(false);
+      setByDescending(false);
+      console.log('otrabotalo')
+    }
   }, [byDuration, byAscending, byDescending])
-
+  
   return (
     <AuthContext.Provider value={{
     allTickets,

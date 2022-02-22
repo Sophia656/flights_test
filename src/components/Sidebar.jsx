@@ -11,18 +11,18 @@ const Sidebar = () => {
             <form>
                 <p>Сортировать</p>
                 <div>
-                    <input type="radio" id="contactChoice1"
-                    name="filter" value="byDuration"
+                    <input type="radio" id="setByAscending"
+                    name="filter" value="setByAscending"
                     onClick={() => setByAscending(true)} />
                     <label> - по возрастанию цены</label>
                     <br/>
-                    <input type="radio" id="contactChoice2"
-                    name="filter" value="byAscending"
+                    <input type="radio" id="setByDescending"
+                    name="filter" value="setByDescending"
                     onClick={() => setByDescending(true)}/>
                     <label> - по убыванию цены</label>
                     <br/>
-                    <input type="radio" id="contactChoice3"
-                    name="filter" value="byDescending"
+                    <input type="radio" id="setByDuration"
+                    name="filter" value="setByDuration"
                     onClick={() => setByDuration(true)}/>
                     <label> - по времени в пути</label>
                 </div>

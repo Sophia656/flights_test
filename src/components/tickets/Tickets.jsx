@@ -8,12 +8,13 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 const Tickets = () => {
-    const { iterat, showMore } = useContext(AuthContext);
-    // useEffect(() => {
-    //     if (!showMore) {
-    //         iterat.length = 2;
-    //     }
-    // }, [showMore])
+    const { iterat, showMore, setShowMore } = useContext(AuthContext);
+    useEffect(() => {
+        if (!showMore) {
+            iterat.length = 2
+        }
+    }, [iterat])
+    
     
     return (
         <div>
