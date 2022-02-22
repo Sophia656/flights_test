@@ -2,15 +2,16 @@
     top: 0;
     right: 0;
     bottom: 0;
-    width: 70vw;
-    height: 100vh;
     position: relative;
-}
-.content {
-    height: 90vh;
-    overflow: scroll;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 button {
     position: fixed;
     bottom: 0;
+    margin-bottom: 1vh;
+    height: 4vh;
+    width: 20vw;
+    font-weight: 500;
 }

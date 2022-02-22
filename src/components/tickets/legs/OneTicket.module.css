@@ -1,0 +1,22 @@
+.wrapper:nth-child(odd) {
+    border-bottom: 2px solid rgb(18, 73, 117);
+}
+.tickets__wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    text-align: left;
+    padding: 2vh 2vw;
+    position: relative;
+}
+.stop {
+    position: absolute;
+    bottom: 0;
+    margin-left: -10vw;
+}
+.second_ticket__wrapper {
+    text-align: right;
+}
+.carrier {
+    text-align: left;
+}

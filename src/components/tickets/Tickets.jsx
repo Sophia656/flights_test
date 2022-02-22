@@ -1,32 +1,51 @@
 import React from 'react';
-import OneWayTicket from './legs/OneWayTicket';
-import ReturnTicket from './legs/ReturnTicket';
-import data from '../../flights.json';
+import OneWayTicket from './legs/oneWayTicket/OneWayTicket';
+import ReturnTicket from './legs/returnTicket/ReturnTicket';
+import s from './Tickets.module.css';
+import { useContext } from 'react';
+import { AuthContext } from './context/context';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const Tickets = () => {
-    const newData = data.result.flights;
-    const iterator = newData.keys();
-    const allTickets = [];
-    for (const key of iterator) {
-        var flight = newData[key].flight 
-        allTickets.push(flight)
-    }
-    console.log(allTickets)
+    const { iterat, showMore } = useContext(AuthContext);
+    // useEffect(() => {
+    //     if (!showMore) {
+    //         iterat.length = 2;
+    //     }
+    // }, [showMore])
+    
     return (
         <div>
-            {allTickets.map((ticket) => {
+            {iterat.map((ticket) => {
                 const newTicket = new Array(ticket);
+                const totalPrice = newTicket[0].price.total
+                const { amount } = totalPrice;
+                const { currencyCode } = totalPrice;
+                const carrier = newTicket[0].carrier.caption;
+
                 return (
-                    <div>
+                    <div className={s.wrapper}>
+                        <header>
+                            <div>{carrier}</div>
+                            <div className={s.price}>
+                                <span>{amount} {currencyCode}</span>
+                                <span>Стоимость для одного взрослого пассажира</span>
+                            </div>
+                        </header>
                         {newTicket.map((item, index) => {
                             const firstLeg = item.legs[0];
                             const secondLeg = item.legs[1];
+                            const { carrier: {caption} } = item;
                         return (
-                            <div>
-                                <OneWayTicket firstLeg={firstLeg} />
-                                <ReturnTicket secondLeg={secondLeg}  />
+                            <div key={index}>
+                                <div className={s.tickets__wrapper}>
+                                    <OneWayTicket caption={caption} firstLeg={firstLeg} />
+                                    <ReturnTicket caption={caption} secondLeg={secondLeg}  />
+                                </div>
                             </div>
                         )})}
+                        <footer>ВЫБРАТЬ</footer>
                     </div>
                 )
             })}

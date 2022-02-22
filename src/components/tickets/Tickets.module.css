@@ -1,0 +1,38 @@
+.wrapper {
+    margin-top: 3vh;
+}
+.tickets__wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 34vh;
+    width: 70vw;
+}
+header {
+    height: 5vh;
+    width: 100%;
+    background-color: rgb(18, 73, 117);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1vw;
+    align-items: center;
+    color: white;
+}
+footer {
+    height: 5vh;
+    width: 100%;
+    background-color: rgb(133, 89, 39);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+}
+.price {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+.price span:nth-child(2) {
+    font-size: 0.7rem;
+}

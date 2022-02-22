@@ -1,15 +1,33 @@
 import React from 'react';
+import { useContext } from 'react';
 import s from './Sidebar.module.css';
+import { AuthContext } from './tickets/context/context';
 
 const Sidebar = () => {
+    const { setByDuration, setByAscending, setByDescending } = useContext(AuthContext);
+
     return (
         <form className={s.wrapper}>
-            <div>
+            <form>
                 <p>Сортировать</p>
-                <label><input type="radio" /> - по возрастанию цены</label><br/>
-                <label><input type="radio" /> - по убыванию цены</label><br/>
-                <label><input type="radio" /> - по времени в пути</label>
-            </div>
+                <div>
+                    <input type="radio" id="contactChoice1"
+                    name="filter" value="byDuration"
+                    onClick={() => setByAscending(true)} />
+                    <label> - по возрастанию цены</label>
+                    <br/>
+                    <input type="radio" id="contactChoice2"
+                    name="filter" value="byAscending"
+                    onClick={() => setByDescending(true)}/>
+                    <label> - по убыванию цены</label>
+                    <br/>
+                    <input type="radio" id="contactChoice3"
+                    name="filter" value="byDescending"
+                    onClick={() => setByDuration(true)}/>
+                    <label> - по времени в пути</label>
+                </div>
+            </form>
+
             <div>
                 <p>Фильтровать</p>
                 <label><input type="checkbox" /> - 1 пересадка</label><br/>
@@ -22,8 +40,16 @@ const Sidebar = () => {
             </div>
             <div>
                 <p>Авиакомпания</p>
-                <label><input type="checkbox" /> - без пересадок</label><br/>
-                <label><input type="checkbox" /> - без пересадок</label>
+                {/* {sortByDuration.map((tic, index) => {
+                    const totalPrice = tic.price.total.amount;
+                    const carrier = tic.carrier.caption;
+                    return (
+                        <div key={index}>
+                            <input type="checkbox" />
+                            - {carrier} от {totalPrice}
+                        </div>
+                    )
+                })} */}
             </div>
         </form>
     );
