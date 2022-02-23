@@ -8,22 +8,32 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 const Tickets = () => {
-    const { iterat, showMore, setShowMore } = useContext(AuthContext);
+    const { iterat, showMore, withoutStops, btnWithoutStops } = useContext(AuthContext);
+    let indexOfArray = 0;
+    const [needArray, setNeedArray] = useState(iterat);
     useEffect(() => {
-        if (!showMore) {
-            iterat.length = 2
+        if (btnWithoutStops) {
+            setNeedArray(withoutStops)
+        } else if (!btnWithoutStops) {
+            setNeedArray(iterat)
         }
-    }, [iterat])
-    
-    
+        return function() {
+            setNeedArray(iterat)
+        }
+    }, [btnWithoutStops])
+
     return (
         <div>
-            {iterat.map((ticket) => {
+            {needArray.map((ticket) => {
                 const newTicket = new Array(ticket);
                 const totalPrice = newTicket[0].price.total
                 const { amount } = totalPrice;
                 const { currencyCode } = totalPrice;
                 const carrier = newTicket[0].carrier.caption;
+                if(!showMore && indexOfArray >= 2){
+                    return
+                }
+                indexOfArray++;
 
                 return (
                     <div className={s.wrapper}>

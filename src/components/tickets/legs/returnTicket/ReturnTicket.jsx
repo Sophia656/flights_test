@@ -53,9 +53,12 @@ const ReturnTicket = ({secondLeg, caption}) => {
                     ?
                     firstTicket.map((segment, index) => {
                         return (
-                            <div key={index}>
+                            <div key={index} className={s.first__ticket}>
                                 <div>{segment.arrivalCity?.caption}, {segment.arrivalAirport?.caption}
                                     <span> ({segment.arrivalAirport?.uid})</span>
+                                </div>
+                                <div className={s.stop}>
+                                    <div>{hours} ч {min} мин</div>
                                 </div>
                                 <div>{segment.arrivalDate}</div>
                             </div>

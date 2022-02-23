@@ -42,6 +42,9 @@ const OneWayTicket = ({firstLeg, caption}) => {
                     firstTicket.map((segment, index) => {
                         return (
                             <div key={index} className={s.first__ticket}>
+                                <div className={s.stop}>
+                                    <div>{hours} ч {min} мин</div>
+                                </div>
                                 <div>{segment.arrivalCity?.caption}, {segment.arrivalAirport?.caption}
                                     <span> ({segment.arrivalAirport?.uid})</span>
                                 </div>

@@ -1,14 +1,15 @@
 import React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import { useContext } from 'react';
 import s from './Sidebar.module.css';
 import { AuthContext } from './tickets/context/context';
 
 const Sidebar = () => {
-    const { setByDuration, setByAscending, setByDescending } = useContext(AuthContext);
+    const { setByDuration, setByAscending, setByDescending, setBtnWithoutStops, btnWithoutStops } = useContext(AuthContext);
 
     return (
         <form className={s.wrapper}>
-            <form>
                 <p>Сортировать</p>
                 <div>
                     <input type="radio" id="setByAscending"
@@ -26,12 +27,11 @@ const Sidebar = () => {
                     onClick={() => setByDuration(true)}/>
                     <label> - по времени в пути</label>
                 </div>
-            </form>
 
-            <div>
+            <div className={s.checkbox}>
                 <p>Фильтровать</p>
-                <label><input type="checkbox" /> - 1 пересадка</label><br/>
-                <label><input type="checkbox" /> - без пересадок</label>
+                    <input type="checkbox" /><label> - 1 пересадка</label><br/>
+                    <input type="checkbox" onClick={() => setBtnWithoutStops(!btnWithoutStops)} /><label> - без пересадок</label>
             </div>
             <div>
                 <p>Цена</p>
