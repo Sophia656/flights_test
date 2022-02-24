@@ -6,8 +6,16 @@ import s from './Sidebar.module.css';
 import { AuthContext } from './tickets/context/context';
 
 const Sidebar = () => {
-    const { setByDuration, setByAscending, setByDescending, setBtnWithoutStops, btnWithoutStops } = useContext(AuthContext);
+    const { setByDuration, setByAscending, setByDescending, setBtnWithoutStops, btnWithoutStops, setBtnWithStops, btnWithStops, priceFrom, setPriceFrom, priceUpTo, setPriceUpTo} = useContext(AuthContext);
+    console.log('priceFrom', priceFrom, 'priceUpTo', priceUpTo)
 
+    // следим, чтобы не было одновременно нажатых 'с 1 пересадкой' и 'без пересадок'
+    if (btnWithStops) {
+        setBtnWithoutStops(false)
+    }
+    if (btnWithoutStops) {
+        setBtnWithStops(false)
+    }
     return (
         <form className={s.wrapper}>
                 <p>Сортировать</p>
@@ -30,13 +38,26 @@ const Sidebar = () => {
 
             <div className={s.checkbox}>
                 <p>Фильтровать</p>
-                    <input type="checkbox" /><label> - 1 пересадка</label><br/>
-                    <input type="checkbox" onClick={() => setBtnWithoutStops(!btnWithoutStops)} /><label> - без пересадок</label>
+                    <input type="checkbox" checked={btnWithStops} onClick={() => setBtnWithStops(!btnWithStops)} /><label> - 1 пересадка</label><br/>
+                    <input type="checkbox" checked={btnWithoutStops} onClick={() => setBtnWithoutStops(!btnWithoutStops)} /><label> - без пересадок</label>
             </div>
             <div>
                 <p>Цена</p>
-                <label>От <input type="number" size="40" placeholder='0' /></label><br/>
-                <label>До <input type="number" size="40" placeholder='1000000' /></label>
+                <label>От <input type="number"
+                 value={priceFrom}
+                 onChange={event => setPriceFrom(event.target.value)}
+                 size="40" 
+                 placeholder='0'
+                />
+                </label>
+                <br/>
+                <label>До <input type="number"
+                value={priceUpTo}
+                onChange={event => setPriceUpTo(event.target.value)}
+                size="40"
+                placeholder='1000000'
+                />
+                </label>
             </div>
             <div>
                 <p>Авиакомпания</p>

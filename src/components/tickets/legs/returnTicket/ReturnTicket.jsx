@@ -1,21 +1,6 @@
 import React from 'react';
 import s from '../OneTicket.module.css';
 
-
-// let dataTime = new Date(departureDate).toLocaleString("ru", {
-//     hour: 'numeric',
-//     minute: 'numeric',
-// });
-// let dataDay = new Date(departureDate).toLocaleString("ru", {
-//     day: 'numeric',
-//     month: 'short',
-// });
-// let dataWeekday = new Date(departureDate).toLocaleString("ru", {
-//     weekday: 'short',
-// });
-
-
-
 const ReturnTicket = ({secondLeg, caption}) => {  
     const tickets = new Array(secondLeg);
     const { duration } = tickets[0];

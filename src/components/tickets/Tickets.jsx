@@ -8,29 +8,32 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 const Tickets = () => {
-    const { iterat, showMore, withoutStops, btnWithoutStops } = useContext(AuthContext);
+    const { iterat, showMore, tickets, withOneStop, btnWithStops, btnWithoutStops, byDuration, byAscending, byDescending } = useContext(AuthContext);
     let indexOfArray = 0;
-    const [needArray, setNeedArray] = useState(iterat);
+    const [currentArray, setCurrentArray] = useState(iterat); // создаем состояние на основе массива всех билетов для итерации при фильтрации, сортировке и ограничения вывода
+    // следим, чтобы не было одновременно нажатых 'с 1 пересадкой' и 'без пересадок'
     useEffect(() => {
         if (btnWithoutStops) {
-            setNeedArray(withoutStops)
-        } else if (!btnWithoutStops) {
-            setNeedArray(iterat)
+            setCurrentArray(tickets)
+        } else if (btnWithStops) {
+            setCurrentArray(withOneStop)
+        } else if (!btnWithoutStops && !btnWithStops) {
+            setCurrentArray(iterat)
         }
         return function() {
-            setNeedArray(iterat)
+            setCurrentArray(iterat)
         }
-    }, [btnWithoutStops])
+    }, [btnWithoutStops, btnWithStops, byDuration, byAscending, byDescending])
 
     return (
         <div>
-            {needArray.map((ticket) => {
+            {currentArray.map((ticket) => {
                 const newTicket = new Array(ticket);
                 const totalPrice = newTicket[0].price.total
                 const { amount } = totalPrice;
                 const { currencyCode } = totalPrice;
                 const carrier = newTicket[0].carrier.caption;
-                if(!showMore && indexOfArray >= 2){
+                if(!showMore && indexOfArray >= 2){ // изначальный вывод - 2 билета
                     return
                 }
                 indexOfArray++;
