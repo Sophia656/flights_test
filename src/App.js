@@ -66,37 +66,11 @@ function App() {
     const caption = key.carrier.caption;
     carriers.push(caption)
   }
-  // массив уникальных названий перевозчиков
-  const uniqueCarriers = unique(carriers)
-  // массив уникальных(по названию перевозчиков) билетов, с минимальной ценой
-  const match = [];
-  // ищем эти билеты и пушим в массив
-  price.forEach(ticket => {
-    uniqueCarriers.forEach(carrier => {
-      if (match.length === 0) {
-        if (ticket.carrier.caption === carrier) {
-          match.push(ticket)
-        }
-      } else {
-        match.forEach(unique => {
-          console.log('m.carrier.caption: ', unique.carrier.caption)
-          
-          if (ticket.carrier.caption !== unique.carrier.caption) {
-            // if(ticket.carrier.caption === carrier) {
-            //   match.push(ticket)
-            //   console.log('i.carrier.caption: ', ticket.carrier.caption)
-            // }
-          }
-        })
-      }
-    })
-    return ticket
-  })
-  console.log('m: ', match)
 
 
 
-  
+
+
 
   // находим совпадающие по категориям и 'цена от', и 'цена до' билеты 
   const both = [];
