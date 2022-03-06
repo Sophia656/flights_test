@@ -10,3 +10,8 @@
     font-weight: 500;
     margin: 3vh 0;
 }
+.list_of_carriers {
+    display: flex;
+    width: 15vw;
+    justify-content: space-between;
+}

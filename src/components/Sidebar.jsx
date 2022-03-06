@@ -1,14 +1,22 @@
 import React from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
 import { useContext } from 'react';
 import s from './Sidebar.module.css';
 import { AuthContext } from './tickets/context/context';
 
 const Sidebar = () => {
-    const { setByDuration, setByAscending, setByDescending, setBtnWithoutStops, btnWithoutStops, setBtnWithStops, btnWithStops, priceFrom, setPriceFrom, priceUpTo, setPriceUpTo} = useContext(AuthContext);
-    console.log('priceFrom', priceFrom, 'priceUpTo', priceUpTo)
-
+    const { setByDuration,
+        setByAscending,
+        setByDescending,
+        setBtnWithoutStops,
+        btnWithoutStops,
+        setBtnWithStops,
+        btnWithStops,
+        priceFrom,
+        setPriceFrom,
+        priceUpTo,
+        setPriceUpTo,
+        handlePressPriceFrom,
+        handlePressPriceUpTo} = useContext(AuthContext);
     // следим, чтобы не было одновременно нажатых 'с 1 пересадкой' и 'без пересадок'
     if (btnWithStops) {
         setBtnWithoutStops(false)
@@ -16,6 +24,7 @@ const Sidebar = () => {
     if (btnWithoutStops) {
         setBtnWithStops(false)
     }
+    
     return (
         <form className={s.wrapper}>
                 <p>Сортировать</p>
@@ -43,7 +52,7 @@ const Sidebar = () => {
             </div>
             <div>
                 <p>Цена</p>
-                <label>От <input type="number"
+                <label onKeyPress={handlePressPriceFrom}>От <input type="number"
                  value={priceFrom}
                  onChange={event => setPriceFrom(event.target.value)}
                  size="40" 
@@ -51,7 +60,7 @@ const Sidebar = () => {
                 />
                 </label>
                 <br/>
-                <label>До <input type="number"
+                <label onKeyPress={handlePressPriceUpTo}>До <input type="number"
                 value={priceUpTo}
                 onChange={event => setPriceUpTo(event.target.value)}
                 size="40"
@@ -61,16 +70,11 @@ const Sidebar = () => {
             </div>
             <div>
                 <p>Авиакомпания</p>
-                {/* {sortByDuration.map((tic, index) => {
-                    const totalPrice = tic.price.total.amount;
-                    const carrier = tic.carrier.caption;
-                    return (
-                        <div key={index}>
-                            <input type="checkbox" />
-                            - {carrier} от {totalPrice}
-                        </div>
-                    )
-                })} */}
+                <div className={s.list_of_carriers}>
+                <input type="checkbox"/>
+                <div> - avia</div>
+                <div> от price</div>
+                </div>
             </div>
         </form>
     );

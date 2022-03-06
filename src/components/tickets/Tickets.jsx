@@ -4,30 +4,28 @@ import ReturnTicket from './legs/returnTicket/ReturnTicket';
 import s from './Tickets.module.css';
 import { useContext } from 'react';
 import { AuthContext } from './context/context';
-import { useState } from 'react';
-import { useEffect } from 'react';
 
 const Tickets = () => {
-    const { iterat, showMore, tickets, withOneStop, btnWithStops, btnWithoutStops, byDuration, byAscending, byDescending } = useContext(AuthContext);
+    const { iterat, setIterat, setPriceFrom, setPriceUpTo, showMore, allTickets, setBtnWithoutStops, setBtnWithStops } = useContext(AuthContext);
     let indexOfArray = 0;
-    const [currentArray, setCurrentArray] = useState(iterat); // создаем состояние на основе массива всех билетов для итерации при фильтрации, сортировке и ограничения вывода
-    // следим, чтобы не было одновременно нажатых 'с 1 пересадкой' и 'без пересадок'
-    useEffect(() => {
-        if (btnWithoutStops) {
-            setCurrentArray(tickets)
-        } else if (btnWithStops) {
-            setCurrentArray(withOneStop)
-        } else if (!btnWithoutStops && !btnWithStops) {
-            setCurrentArray(iterat)
-        }
-        return function() {
-            setCurrentArray(iterat)
-        }
-    }, [btnWithoutStops, btnWithStops, byDuration, byAscending, byDescending])
+    const handleClick = () => {
+        setIterat(allTickets)
+        setBtnWithoutStops(false)
+        setBtnWithStops(false)
+        setPriceFrom('')
+        setPriceUpTo('')
+    }
 
     return (
+        iterat.length === 0
+        ? 
         <div>
-            {currentArray.map((ticket) => {
+            <div>TICKETS NOT FOUND!</div>
+            <button onClick={handleClick} style={{marginBottom: '60vh'}}>RETURN</button>
+        </div>
+        :
+        <div>
+            {iterat.map((ticket) => {
                 const newTicket = new Array(ticket);
                 const totalPrice = newTicket[0].price.total
                 const { amount } = totalPrice;
