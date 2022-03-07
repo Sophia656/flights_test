@@ -49,9 +49,6 @@ function App() {
       }
   }
 
-
-
-
   // функция для создания массива только с уникальными значениями
   function unique(arr) {
     return Array.from(new Set(arr));
@@ -63,14 +60,60 @@ function App() {
   // массив с названиями перевозчиков
   const carriers = [];
   for (const key of price) {
-    const caption = key.carrier.caption;
+    const caption = [key.carrier.caption, key.price.total.amount];
     carriers.push(caption)
   }
 
+  const uniqueCarriers = []; // массив уникальных билетов
+  let matchCounter = 0; // счетчик совпадений билетов
+  let namesCounter = -1; // счетчик совпадения названий перевозчиков
+  const names = []; // массив уникальных перевозчиков
+  names.length = carriers.length
 
+  // ищем уникальные(по названиям первозчиков) билеты с минимальной ценой
+  carriers.forEach(item => {
+    for(let i = 0; i < names.length; i++) {
+      if (item[0] === names[i]) {
+        matchCounter++
+        break
+      }
+    }
+    if (matchCounter === 0) {
+      namesCounter++
+      names[namesCounter] = item[0]
+      uniqueCarriers.push([item])
+    }
+    matchCounter = 0
+  })
 
+// массив чисел для чекбоксов
+  const numbers = [];
+  for (let i = 0; i < 10; i++) {
+    numbers.push(i)
+  }
 
+  const [currentNum, setCurrentNum] = useState(Number); // для изменения индекса в итерирующемся names
+  const [firstBtn, setFirstBtn] = useState(false); // по клику выводим билеты
 
+  // по клику на чексбокс выводим тот или иной массив билетов(по названию перевозчика)
+  useEffect(() => {
+    const currentCarrier = [];
+    allTickets.forEach(ticket => {
+      if (ticket.carrier.caption === names[currentNum]) { //[] --> for let = 10 i
+        currentCarrier.push(ticket)
+      }
+      return function() {
+        setCurrentNum(0)
+      }
+    })
+
+    if (firstBtn) {
+      setIterat(currentCarrier)
+    }
+    return function() {
+      setIterat(allTickets)
+    }
+  }, [firstBtn, currentNum])
 
   // находим совпадающие по категориям и 'цена от', и 'цена до' билеты 
   const both = [];
@@ -81,6 +124,7 @@ function App() {
       }
     })
   })
+
   // пушим разные массивы билетов в зависимости от фильтрации по категориям 'цена от' и 'цена до'
   useEffect(() => {
     if (currentPriceFrom) {
@@ -174,7 +218,7 @@ function App() {
     })
   })
 
-const [handlePressPriceFromBool, setHandlePressPriceFromBool] = useState(false)
+const [handlePressPriceFromBool, setHandlePressPriceFromBool] = useState(false) // для поля ввода 'цена от'
   const handlePressPriceFrom = (event) => {
     if (event.key === "Enter") {
       setHandlePressPriceFromBool(true)
@@ -184,7 +228,7 @@ const [handlePressPriceFromBool, setHandlePressPriceFromBool] = useState(false)
         
     }
   }
-  const [handlePressPriceUpToBool, setHandlePressPriceUpToBool] = useState(false)
+  const [handlePressPriceUpToBool, setHandlePressPriceUpToBool] = useState(false) // для поля ввода 'цена до'
   const handlePressPriceUpTo = (event) => {
     if (event.key === "Enter") {
       setHandlePressPriceUpToBool(true)
@@ -241,7 +285,7 @@ const [handlePressPriceFromBool, setHandlePressPriceFromBool] = useState(false)
       return function() {
         setByDuration(false);
       }
-      // по возростанию цены
+      // по возрастанию цены
     } else if(byAscending) {
       const sortByAscending = iterat.sort(function(a, b) {
         return a.price.total.amount - b.price.total.amount
@@ -288,7 +332,12 @@ const [handlePressPriceFromBool, setHandlePressPriceFromBool] = useState(false)
     setPriceUpTo,
     priceUpTo,
     handlePressPriceFrom,
-    handlePressPriceUpTo
+    handlePressPriceUpTo,
+    uniqueCarriers,
+    setFirstBtn,
+    firstBtn,
+    setCurrentNum,
+    numbers
     }}>
       <div className="App">
         <Sidebar />

@@ -25,7 +25,7 @@ const Tickets = () => {
         </div>
         :
         <div>
-            {iterat.map((ticket) => {
+            {iterat.map((ticket, index) => {
                 const newTicket = new Array(ticket);
                 const totalPrice = newTicket[0].price.total
                 const { amount } = totalPrice;
@@ -37,7 +37,7 @@ const Tickets = () => {
                 indexOfArray++;
 
                 return (
-                    <div className={s.wrapper}>
+                    <div key={index} className={s.wrapper}>
                         <header>
                             <div>{carrier}</div>
                             <div className={s.price}>

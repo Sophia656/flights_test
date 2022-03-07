@@ -5,13 +5,30 @@
     width: 20vw;
     margin-top: 10vh;
     text-align: left;
+    font-size: 0.9rem;
 }
 .wrapper p {
     font-weight: 500;
     margin: 3vh 0;
 }
+.airlies_checked {
+    display: flex;
+    flex-direction: column;
+    
+}
+.airlies_checked input {
+    margin-bottom: 4vh;
+}
 .list_of_carriers {
     display: flex;
-    width: 15vw;
+    width: 20vw;
     justify-content: space-between;
+}
+.carriers__wrapper {
+    display: flex;
+    flex-direction: column;
+}
+.carriers {
+    display: flex;
+    padding-bottom: 3vh;
 }

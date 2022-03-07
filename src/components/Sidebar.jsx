@@ -16,7 +16,12 @@ const Sidebar = () => {
         priceUpTo,
         setPriceUpTo,
         handlePressPriceFrom,
-        handlePressPriceUpTo} = useContext(AuthContext);
+        handlePressPriceUpTo,
+        uniqueCarriers,
+        setFirstBtn,
+        firstBtn,
+        setCurrentNum,
+        numbers} = useContext(AuthContext);
     // следим, чтобы не было одновременно нажатых 'с 1 пересадкой' и 'без пересадок'
     if (btnWithStops) {
         setBtnWithoutStops(false)
@@ -68,14 +73,43 @@ const Sidebar = () => {
                 />
                 </label>
             </div>
-            <div>
+            
+                <div>
                 <p>Авиакомпания</p>
                 <div className={s.list_of_carriers}>
-                <input type="checkbox"/>
-                <div> - avia</div>
-                <div> от price</div>
+                    
+                        <div className={s.airlies_checked}>
+                            {numbers.map(number =>
+                                <input
+                                type="checkbox"
+                                key={number}
+                                onClick={() => {setFirstBtn(true); setCurrentNum(number)}}
+                                />
+                            )}
+                        </div>
+                    
+
+                    <div className={s.carriers__wrapper}>
+                        {uniqueCarriers.map((current, index) => {
+                            return (
+                                <div key={index}>
+                                    {current.map((carrier, index) => {
+                                        return (
+                                            <div key={index} className={s.carriers}>
+                                                <div> - {carrier[0]}</div>
+                                                <div> от {carrier[1]}</div>
+                                            </div>
+                                        )
+                        
+                                    })}
+                                </div>
+                            )}
+                        )}
+                    </div>
+                
                 </div>
             </div>
+            
         </form>
     );
 };
