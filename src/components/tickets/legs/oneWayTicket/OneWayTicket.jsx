@@ -1,5 +1,5 @@
 import React from 'react';
-import DepartureDate from '../../items/DepartureDate';
+import Time from '../../items/Time';
 import s from '../OneTicket.module.css';
 
 const OneWayTicket = ({firstLeg, caption}) => {
@@ -24,22 +24,22 @@ const OneWayTicket = ({firstLeg, caption}) => {
         <div className={s.wrapper}>
             <div className={s.tickets__wrapper}>
                 {firstTicket.map((segment, index) => {
-                    const arrivalDate = segment.arrivalDate;
-                    const departureDate = segment.departureDate;
+                    const { departureDate } = segment;
                     return (
                         <div key={index}>
                             <div>{segment.departureCity?.caption}, {segment.departureAirport?.caption}
                                 <span> ({segment.departureAirport?.uid})</span>
                             </div>
-                            <DepartureDate departureDate={departureDate} />
+                            <Time departureDate={departureDate} />
                         </div>
                     )
                 })}
                 {secondTicket.map((segment, index) => {
                     return (
-                    segment === null
+                    segment === null // если второго билета нет
                     ?
                     firstTicket.map((segment, index) => {
+                        const { arrivalDate } = segment;
                         return (
                             <div key={index} className={s.first__ticket}>
                                 <div className={s.stop}>
@@ -48,7 +48,7 @@ const OneWayTicket = ({firstLeg, caption}) => {
                                 <div>{segment.arrivalCity?.caption}, {segment.arrivalAirport?.caption}
                                     <span> ({segment.arrivalAirport?.uid})</span>
                                 </div>
-                                <div>{segment.arrivalDate}</div>
+                                <Time arrivalDate={arrivalDate} />
                             </div>
                         )
                     })
@@ -62,7 +62,7 @@ const OneWayTicket = ({firstLeg, caption}) => {
                                 <div>{segment.arrivalCity?.caption}, {segment.arrivalAirport?.caption}
                                     <span> ({segment.arrivalAirport?.uid})</span>
                                 </div>
-                                <div>{segment.arrivalDate}</div>
+                                <Time arrivalDate={segment.arrivalDate} />
                             </div>
                         </div>
                     )

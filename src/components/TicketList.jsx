@@ -7,8 +7,8 @@ import Tickets from './tickets/Tickets';
 const TicketList = () => {
     const { showMore, setShowMore } = useContext(AuthContext);
     return (
-        <div className={s.wrapper}>
-            <div>
+        <div>
+            <div className={s.wrapper}>
                 <Tickets className={s.content} />
             </div>
             {!showMore

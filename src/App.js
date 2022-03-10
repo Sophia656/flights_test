@@ -3,6 +3,13 @@ import './App.css';
 import Sidebar from './components/Sidebar';
 import TicketList from './components/TicketList';
 import { AuthContext } from './components/tickets/context/context';
+import { useChangeOutputArray } from './components/tickets/items/hooks/useChangeOutputArray';
+import { useFilterAndSorted } from './components/tickets/items/hooks/useFilterAndSorted';
+import { useFilterByPriceFromAndTo } from './components/tickets/items/hooks/useFilterByPriceFromAndTo';
+import { usePriceAndStops } from './components/tickets/items/hooks/usePriceAndStops';
+import { useShowArrayOnClick } from './components/tickets/items/hooks/useShowArrayOnClick';
+import { useSorted } from './components/tickets/items/hooks/useSorted';
+import { unique, arrayOfCarriers, arrayOfUniqueCarriers, arrayOfNumbers, arrayOfBothPrice, arrayOfWithoutStops, arrayOfPriceFromAndWithoutStops, arrayOfPriceUpToAndWithoutStops, arrayOfPriceFromAndWithOneStop, arrayOfPriceUpToAndWithOneStop, arrayOfBothPriceAndWithoutStops, arrayOfBothPriceAndWithStops } from './components/tickets/items/utils';
 import data from './flights.json';
 
 function App() {
@@ -49,176 +56,74 @@ function App() {
       }
   }
 
-  // функция для создания массива только с уникальными значениями
-  function unique(arr) {
-    return Array.from(new Set(arr));
-  }
-  // массив билетов, отсортированный по возрастанию цены
-  const price = allTickets.sort(function(a, b) {
-    return a.price.total.amount - b.price.total.amount
+  const carriers = arrayOfCarriers(allTickets) // массив с названиями перевозчиков и цен
+  const captions = carriers.map(caption => { // массив с названиями перевозчиков
+    return caption[0]
   })
-  // массив с названиями перевозчиков
-  const carriers = [];
-  for (const key of price) {
-    const caption = [key.carrier.caption, key.price.total.amount];
-    carriers.push(caption)
-  }
 
-  const uniqueCarriers = []; // массив уникальных билетов
-  let matchCounter = 0; // счетчик совпадений билетов
-  let namesCounter = -1; // счетчик совпадения названий перевозчиков
   const names = []; // массив уникальных перевозчиков
-  names.length = carriers.length
-
-  // ищем уникальные(по названиям первозчиков) билеты с минимальной ценой
-  carriers.forEach(item => {
-    for(let i = 0; i < names.length; i++) {
-      if (item[0] === names[i]) {
-        matchCounter++
-        break
-      }
-    }
-    if (matchCounter === 0) {
-      namesCounter++
-      names[namesCounter] = item[0]
-      uniqueCarriers.push([item])
-    }
-    matchCounter = 0
-  })
-
-// массив чисел для чекбоксов
-  const numbers = [];
-  for (let i = 0; i < 10; i++) {
-    numbers.push(i)
-  }
-
+  names.length = unique(captions).length //задаем правильную длину массива
+  const uniqueCarriers = arrayOfUniqueCarriers({carriers, names})
+  const numbers = arrayOfNumbers(names); // массив чисел для чекбоксов
   const [currentNum, setCurrentNum] = useState(Number); // для изменения индекса в итерирующемся names
-  const [firstBtn, setFirstBtn] = useState(false); // по клику выводим билеты
+  const [checked, setChecked] = useState(false); // по клику выводим билеты
+  const [checkedCarriers, setCheckedCarriers] = useState([]); // массив кликнутых перевозчиков
 
-  // по клику на чексбокс выводим тот или иной массив билетов(по названию перевозчика)
-  useEffect(() => {
-    const currentCarrier = [];
-    allTickets.forEach(ticket => {
-      if (ticket.carrier.caption === names[currentNum]) { //[] --> for let = 10 i
-        currentCarrier.push(ticket)
-      }
-      return function() {
-        setCurrentNum(0)
-      }
-    })
-
-    if (firstBtn) {
-      setIterat(currentCarrier)
-    }
-    return function() {
-      setIterat(allTickets)
-    }
-  }, [firstBtn, currentNum])
-
-  // находим совпадающие по категориям и 'цена от', и 'цена до' билеты 
-  const both = [];
-  ticketsPriceFrom.map(i => {
-    ticketsPriceUpTo.map(j => {
-      if (i === j) {
-        both.push(i)
-      }
-    })
+  // если все чекбоксы не отмечены - показываем изначальный массив
+  useShowArrayOnClick({allTickets,
+    currentNum,
+    setChecked,
+    checked,
+    checkedCarriers,
+    setCheckedCarriers,
+    names
   })
+
+  // изменяем массив вывода
+  useChangeOutputArray({setIterat, allTickets, checkedCarriers})
+
+  // массив билетов, совпадающих по категориям и 'цена от', и 'цена до' 
+  const both = arrayOfBothPrice({ticketsPriceFrom, ticketsPriceUpTo});
 
   // пушим разные массивы билетов в зависимости от фильтрации по категориям 'цена от' и 'цена до'
-  useEffect(() => {
-    if (currentPriceFrom) {
-      setIterat(ticketsPriceFrom)
-    }
-    if (currentPriceUpTo) {
-      setIterat(ticketsPriceUpTo)
-    }
-    if (currentPriceFrom && currentPriceUpTo) {
-      setIterat(both)
-    }
-    return function() {
-      setIterat(allTickets)
-    }
-  }, [currentPriceFrom, currentPriceUpTo])
+  useFilterByPriceFromAndTo({setIterat,
+    currentPriceFrom,
+    ticketsPriceFrom,
+    currentPriceUpTo,
+    ticketsPriceUpTo,
+    both,
+    allTickets
+  })
 
-  const ticketsWithoutStops = []; // массив билетов (без пересадок && с одной пересадкой обратно)
-  ticketsWithoutStops.push(...allWithoutStops)
-  ticketsWithoutStops.push(...without)
+  const ticketsWithoutStops = arrayOfWithoutStops({allWithoutStops, without}); // массив билетов (без пересадок && с одной пересадкой обратно)
 
   const [byDuration, setByDuration] = useState(false); // создаем состояние на основе сортировки по времени
   const [byAscending, setByAscending] = useState(false); // создаем состояние на основе сортировки по возростанию цены
   const [byDescending, setByDescending] = useState(false); // создаем состояние на основе сортировки по убыванию цены
 
   // пушим разные массивы билетов в зависимости от фильтрации/сортировки
-    useEffect(() => {
-    if (btnWithoutStops) {
-      setIterat(ticketsWithoutStops)
-    } else if (btnWithStops){
-      setIterat(withOneStop)
-    } else {
-      setIterat(allTickets)
-    }
-    return function() {
-      setIterat(allTickets)
-    }
-  }, [btnWithoutStops, btnWithStops])
+  useFilterAndSorted({setIterat,
+    btnWithoutStops,
+    ticketsWithoutStops,
+    btnWithStops,
+    withOneStop,
+    allTickets
+  })
 
   // цена от и без пересадок
-  const ticketsPriceFromAndWithoutStops = [];
-  ticketsPriceFrom.map(i => {
-    ticketsWithoutStops.map(j => {
-      if (i === j) {
-        ticketsPriceFromAndWithoutStops.push(i)
-      }
-    })
-  })
+  const ticketsPriceFromAndWithoutStops = arrayOfPriceFromAndWithoutStops({ticketsPriceFrom, ticketsWithoutStops});
   // цена до и без пересадок
-  const ticketsPriceUpToAndWithoutStops = [];
-  ticketsPriceUpTo.map(i => {
-    ticketsWithoutStops.map(j => {
-      if (i === j) {
-        ticketsPriceUpToAndWithoutStops.push(i)
-      }
-    })
-  })
+  const ticketsPriceUpToAndWithoutStops = arrayOfPriceUpToAndWithoutStops({ticketsPriceUpTo, ticketsWithoutStops});
   // цена от и 1 пересадка
-  const ticketsPriceFromAndWithOneStop = [];
-  ticketsPriceFrom.map(i => {
-    withOneStop.map(j => {
-      if (i === j) {
-        ticketsPriceFromAndWithOneStop.push(i)
-      }
-    })
-  })
+  const ticketsPriceFromAndWithOneStop = arrayOfPriceFromAndWithOneStop({ticketsPriceFrom, withOneStop});
   // цена до и 1 пересадка
-  const ticketsPriceUpToAndWithOneStop = [];
-  ticketsPriceUpTo.map(i => {
-    withOneStop.map(j => {
-      if (i === j) {
-        ticketsPriceUpToAndWithOneStop.push(i)
-      }
-    })
-  })
+  const ticketsPriceUpToAndWithOneStop = arrayOfPriceUpToAndWithOneStop({ticketsPriceUpTo, withOneStop});
   // цена от и цена до и без пересадок
-  const bothPriceAndWithoutStops = [];
-  both.map(i => {
-    ticketsWithoutStops.map(j => {
-      if (i === j) {
-        bothPriceAndWithoutStops.push(i)
-      }
-    })
-  })
+  const bothPriceAndWithoutStops = arrayOfBothPriceAndWithoutStops({both, ticketsWithoutStops});
   // цена от и цена до и 1 пересадка
-  const bothPriceAndWithStops = [];
-  both.map(i => {
-    withOneStop.map(j => {
-      if (i === j) {
-        bothPriceAndWithStops.push(i)
-      }
-    })
-  })
-
-const [handlePressPriceFromBool, setHandlePressPriceFromBool] = useState(false) // для поля ввода 'цена от'
+  const bothPriceAndWithStops = arrayOfBothPriceAndWithStops({both, withOneStop});
+  // по tab
+  const [handlePressPriceFromBool, setHandlePressPriceFromBool] = useState(false) // для поля ввода 'цена от'
   const handlePressPriceFrom = (event) => {
     if (event.key === "Enter") {
       setHandlePressPriceFromBool(true)
@@ -237,81 +142,33 @@ const [handlePressPriceFromBool, setHandlePressPriceFromBool] = useState(false) 
         setIterat(ticketsPriceUpTo)
     }
   }
+  // фасетная фильтрация по цене и пересадкам
+  usePriceAndStops({btnWithoutStops,
+    handlePressPriceFromBool,
+    setIterat,
+    ticketsPriceFromAndWithoutStops,
+    handlePressPriceUpToBool,
+    ticketsPriceUpToAndWithoutStops,
+    ticketsPriceFromAndWithOneStop,
+    ticketsPriceUpToAndWithOneStop,
+    bothPriceAndWithoutStops,
+    bothPriceAndWithStops,
+    allTickets,
+    btnWithStops
+  })
 
-  useEffect(() => {
-    // цена от и без пересадок
-    if (btnWithoutStops && handlePressPriceFromBool) {
-      setIterat(ticketsPriceFromAndWithoutStops)
-      console.log('without && from')
-    }
-    // цена до и без пересадок
-    if (btnWithoutStops && handlePressPriceUpToBool) {
-      setIterat(ticketsPriceUpToAndWithoutStops)
-      console.log('without && up to')
-    }
-    // цена от и 1 пересадка
-    if (btnWithStops && handlePressPriceFromBool) {
-      setIterat(ticketsPriceFromAndWithOneStop)
-      console.log('with && from')
-    }
-    // цена до и 1 пересадка
-    if (btnWithStops && handlePressPriceUpToBool) {
-      setIterat(ticketsPriceUpToAndWithOneStop)
-      console.log('with && up to')
-    }
-    // цена от и цена до и без пересадок
-    if (btnWithoutStops && handlePressPriceFromBool && handlePressPriceUpToBool) {
-      setIterat(bothPriceAndWithoutStops)
-      console.log('both && without')
-    }
-    // цена от и цена до и 1 пересадка
-    if (btnWithStops && handlePressPriceFromBool && handlePressPriceUpToBool) {
-      setIterat(bothPriceAndWithStops)
-      console.log('both && with')
-    }
-    return function() {
-      setIterat(allTickets)
-    }
-  }, [btnWithoutStops, btnWithStops, handlePressPriceFromBool, handlePressPriceUpToBool])
-  // сортировка:
-  useEffect(() => {
-    // по времени
-    if(byDuration) {
-      const sortByDuration = iterat.sort(function(a, b) {
-        return a.legs[0].duration - b.legs[0].duration;
-      })
-      setIterat(sortByDuration)
-
-      return function() {
-        setByDuration(false);
-      }
-      // по возрастанию цены
-    } else if(byAscending) {
-      const sortByAscending = iterat.sort(function(a, b) {
-        return a.price.total.amount - b.price.total.amount
-      })
-      setIterat(sortByAscending)
-
-      return function() {
-        setByAscending(false);
-      }
-      // по убыванию цены
-    } else if(byDescending) {
-      const sortByDescending = iterat.sort(function(a, b) {
-        return b.price.total.amount - a.price.total.amount
-      })
-      setIterat(sortByDescending)
-
-      return function() {
-        setByDescending(false)
-      }
-    }
-    return function() {
-      setByDuration(false);
-      setByAscending(false);
-      setByDescending(false);
-    }
-  }, [byDuration, byAscending, byDescending, btnWithoutStops, btnWithStops]);
+  // СОРТИРОВАТЬ:
+  useSorted({byDuration,
+    byAscending,
+    byDescending,
+    btnWithoutStops,
+    btnWithStops,
+    iterat,
+    setByDescending,
+    setByAscending,
+    setByDuration,
+    setIterat
+  })
 
   return (
     <AuthContext.Provider value={{
@@ -334,8 +191,8 @@ const [handlePressPriceFromBool, setHandlePressPriceFromBool] = useState(false) 
     handlePressPriceFrom,
     handlePressPriceUpTo,
     uniqueCarriers,
-    setFirstBtn,
-    firstBtn,
+    setChecked,
+    checked,
     setCurrentNum,
     numbers
     }}>

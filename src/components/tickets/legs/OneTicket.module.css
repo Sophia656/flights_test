@@ -8,15 +8,22 @@
     text-align: left;
     padding: 2vh 2vw;
     position: relative;
+    height: 14vh;
+}
+.second_ticket__wrapper span, .tickets__wrapper span {
+    color: rgb(18, 73, 117);
 }
 .stop {
     position: absolute;
-    bottom: 0;
-    margin-left: -10vw;
+    margin-top: 2vh;
+    margin-left: -15vw;
 }
-.second_ticket__wrapper {
+.second_ticket__wrapper, .first__ticket{
     text-align: right;
 }
 .carrier {
     text-align: left;
+}
+b {
+    color: black;
 }

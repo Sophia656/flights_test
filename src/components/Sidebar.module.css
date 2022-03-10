@@ -3,32 +3,43 @@
     bottom: 0;
     left: 0;
     width: 20vw;
-    margin-top: 10vh;
+    margin-top: 2vh;
     text-align: left;
     font-size: 0.9rem;
 }
 .wrapper p {
     font-weight: 500;
-    margin: 3vh 0;
-}
-.airlies_checked {
-    display: flex;
-    flex-direction: column;
-    
-}
-.airlies_checked input {
-    margin-bottom: 4vh;
+    margin: 2vh 0;
 }
 .list_of_carriers {
     display: flex;
-    width: 20vw;
-    justify-content: space-between;
+    align-items: center;
+}
+.carriers__checkbox {
+    display: flex;
+    flex-direction: column;
+    width: 2vw;
+    align-items: flex-start;
+    justify-content: space-evenly;
+}
+.checkbox {
+    height: 5.2vh;
 }
 .carriers__wrapper {
     display: flex;
     flex-direction: column;
+    align-content: space-between;
+    align-items: baseline;
 }
 .carriers {
     display: flex;
-    padding-bottom: 3vh;
+    width: 17vw;
+    height: 5vh;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+.price {
+    display: flex;
+    text-align: right;
 }

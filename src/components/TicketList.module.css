@@ -11,6 +11,7 @@ button {
     position: fixed;
     bottom: 0;
     margin-bottom: 1vh;
+    margin-left: -10vw;
     height: 4vh;
     width: 20vw;
     font-weight: 500;

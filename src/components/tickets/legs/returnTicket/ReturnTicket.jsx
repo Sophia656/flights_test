@@ -1,4 +1,5 @@
 import React from 'react';
+import Time from '../../items/Time';
 import s from '../OneTicket.module.css';
 
 const ReturnTicket = ({secondLeg, caption}) => {  
@@ -23,12 +24,13 @@ const ReturnTicket = ({secondLeg, caption}) => {
         <div className={s.wrapper}>
             <div className={s.tickets__wrapper}>
                 {firstTicket.map((segment, index) => {
+                    const { departureDate } = segment;
                     return (
                         <div key={index}>
                             <div>{segment.departureCity?.caption}, {segment.departureAirport?.caption}
                                 <span> ({segment.departureAirport?.uid})</span>
                             </div>
-                            <div>{segment.arrivalDate}</div>
+                            <Time departureDate={departureDate} />
                         </div>
                     )
                 })}
@@ -37,6 +39,7 @@ const ReturnTicket = ({secondLeg, caption}) => {
                     segment === null
                     ?
                     firstTicket.map((segment, index) => {
+                        const { arrivalDate } = segment;
                         return (
                             <div key={index} className={s.first__ticket}>
                                 <div>{segment.arrivalCity?.caption}, {segment.arrivalAirport?.caption}
@@ -45,7 +48,7 @@ const ReturnTicket = ({secondLeg, caption}) => {
                                 <div className={s.stop}>
                                     <div>{hours} ч {min} мин</div>
                                 </div>
-                                <div>{segment.arrivalDate}</div>
+                                <Time arrivalDate={arrivalDate} />
                             </div>
                         )
                     })
@@ -59,7 +62,7 @@ const ReturnTicket = ({secondLeg, caption}) => {
                                 <div>{segment.arrivalCity?.caption}, {segment.arrivalAirport?.caption}
                                     <span> ({segment.arrivalAirport?.uid})</span>
                                 </div>
-                                <div>{segment.arrivalDate}</div>
+                                <Time arrivalDate={segment.arrivalDate} />
                             </div>
                         </div>
                     )

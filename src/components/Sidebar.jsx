@@ -18,8 +18,8 @@ const Sidebar = () => {
         handlePressPriceFrom,
         handlePressPriceUpTo,
         uniqueCarriers,
-        setFirstBtn,
-        firstBtn,
+        setChecked,
+        checked,
         setCurrentNum,
         numbers} = useContext(AuthContext);
     // следим, чтобы не было одновременно нажатых 'с 1 пересадкой' и 'без пересадок'
@@ -55,7 +55,7 @@ const Sidebar = () => {
                     <input type="checkbox" checked={btnWithStops} onClick={() => setBtnWithStops(!btnWithStops)} /><label> - 1 пересадка</label><br/>
                     <input type="checkbox" checked={btnWithoutStops} onClick={() => setBtnWithoutStops(!btnWithoutStops)} /><label> - без пересадок</label>
             </div>
-            <div>
+            <div style={{paddingTop: '2vh'}}>
                 <p>Цена</p>
                 <label onKeyPress={handlePressPriceFrom}>От <input type="number"
                  value={priceFrom}
@@ -74,39 +74,34 @@ const Sidebar = () => {
                 </label>
             </div>
             
-                <div>
+            <div>
                 <p>Авиакомпания</p>
                 <div className={s.list_of_carriers}>
-                    
-                        <div className={s.airlies_checked}>
-                            {numbers.map(number =>
-                                <input
+                    <div className={s.carriers__checkbox}>
+                        {numbers.map(number =>
+                            <input
+                                className={s.checkbox}
                                 type="checkbox"
                                 key={number}
-                                onClick={() => {setFirstBtn(true); setCurrentNum(number)}}
-                                />
-                            )}
-                        </div>
-                    
-
+                                onClick={() => {setChecked(true); setCurrentNum(number)}}
+                            />
+                        )}
+                    </div>
                     <div className={s.carriers__wrapper}>
-                        {uniqueCarriers.map((current, index) => {
+                        {uniqueCarriers.map((current) => {
                             return (
-                                <div key={index}>
-                                    {current.map((carrier, index) => {
-                                        return (
-                                            <div key={index} className={s.carriers}>
-                                                <div> - {carrier[0]}</div>
-                                                <div> от {carrier[1]}</div>
-                                            </div>
-                                        )
-                        
-                                    })}
-                                </div>
+                                current.map((carrier, index) => {
+                                    return (
+                                        <div key={index} className={s.carriers}>
+
+                                            <div className={s.carrier}> - {carrier[0]}</div>
+                                            <div className={s.price}> от {carrier[1]}</div>
+                                        </div>
+                                    )
+                                })
                             )}
                         )}
                     </div>
-                
                 </div>
             </div>
             
