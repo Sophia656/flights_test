@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useContext } from 'react';
 import s from './TicketList.module.css';
 import { AuthContext } from './tickets/context/context';
