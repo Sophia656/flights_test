@@ -1,3 +1,3 @@
 ***git pages***
 
-https://sophia656.github.io/flights/
+https://sophia656.github.io/flights_test/
